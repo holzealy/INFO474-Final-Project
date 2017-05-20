@@ -13,6 +13,7 @@
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/scroller.js"></script>
 
     <!-- CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -20,10 +21,34 @@
 </head>
 
 <body>
-    <!-- Create a header that describes the project -->
+    <!--header-->
     <div class="jumbotron container-fluid">
         <div class="container">
             <h1>Final Project</h1>
+        </div>
+    </div>
+
+    <!--content-->
+    <div class="container">
+        <div id='graphic'>
+            <div id='sections'>
+                <section class="step">
+                    <div class="title">What is a p-value?</div>
+                    A p-value is the probability that you would observe a result given that the null hypothesis is true. In other words, the probability of getting your results by chance.
+                </section>
+                <section class="step">
+                    <div class="title">What is p-hacking?</div>
+                    P-hacking is a way of manipulating the data to uncover patterns in the data that have a p-value less than 0.05, which is the common cutoff for significance. If the p-value for your data is above 0.05 that means that the results are more likely to have occured by chance and therefore your findings are not publishable. However, there are ways to manipulate your data to get the p-value below 0.05 including only reporting measures with p < 0.05, excluding participants, and transforming the data. Researchers may be incentivized to p-hack to make their findings publishable.
+                </section>
+                <section class="step">
+                    <div class="title">An example</div>
+                    You can manipulate the variables to get the desired p-value of 0.05.
+                </section>
+            </div>
+            <div id='vis'>
+            </div>
+            <div id="extra-space">
+            </div>
         </div>
     </div>
 

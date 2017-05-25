@@ -34,16 +34,32 @@
         <div id='graphic'>
             <div id='sections'>
                 <section class="step">
+                    <div class="title">Hypothesis Testing</div>
+                    In statistics, people often want to know if there is a correlation between two or more variables in the data they are observing. Hypotheses are made to make claims about the data, and the null hypothesis says that there is no correlation. Hypothesis tests are performed to test the validity of that claim. (Vis: normal curve.)
+                </section>
+                <section class="step">
                     <div class="title">What is a p-value?</div>
-                    A p-value is the probability that you would observe a result given that the null hypothesis is true. In other words, the probability of getting your results by chance.
+                    A p-value is the probability that you would observe a result given that the null hypothesis is true. In other words, the probability of getting your results by chance. A large p-value means that there is little evidence the null hypothesis, so you the result is you fail to reject it, meaning the correlation for the variables observed is not statistically significant. A small p-value means that there is strong evidence against the null hypothesis, so the result is you reject it, meaning the observed correlation is statistically significant. A p-value of 0.05 is the common cutoff for significance. (Vis: normal curve with vertical line and p < 0.05 shaded.)
                 </section>
                 <section class="step">
                     <div class="title">What is p-hacking?</div>
-                    P-hacking is a way of manipulating the data to uncover patterns in the data that have a p-value less than 0.05, which is the common cutoff for significance. If the p-value for your data is above 0.05 that means that the results are more likely to have occured by chance and therefore your findings are not publishable. However, there are ways to manipulate your data to get the p-value below 0.05 including only reporting measures with p < 0.05, excluding participants, and transforming the data. Researchers may be incentivized to p-hack to make their findings publishable.
+                    P-hacking is a way of manipulating the data to uncover patterns in the data that have a p-value less than 0.05. If the p-value for your data is above 0.05 that means that the results are more likely to have occured by chance and therefore your findings are not publishable. However, there are ways to manipulate your data to get the p-value below 0.05. Some of these methods include only reporting measures with p < 0.05, excluding participants, and transforming the data to fit your needs. Researchers may be incentivized to p-hack to make their findings publishable because they put a lot of time and money into their work. (Vis: normal curve with vertical line and p < 0.05 shaded.)
                 </section>
                 <section class="step">
-                    <div class="title">An example</div>
-                    You can manipulate the variables to get the desired p-value of 0.05.
+                    <div class="title">Is there a relationship in this data?</div>
+                    This scatterplot shows two variables plotted against each other for a number of observations. You might be interested in whether or not there is a correlation between the two variables. (Vis: scatterplot)
+                </section>
+                <section class="step">
+                    This line shows the relationship between the two variables for the whole data set. This p-value represents the probability that you would get results as strong as this without there being a real correlation between these two variables.
+                    (Vis: scatterplot with line and p-value.)
+                </section>
+                <section class="step">
+                    <div class="title">Try it out</div>
+                    You can manipulate the variables to get the desired p-value of 0.05. (Vis: scatterplot with line, p-value, and buttons to change variables.)
+                </section>
+                <section class="step">
+                    <div class="title">The dangers of p-hacking</div>
+                    When researchers manipulate their data for the purpose of p-hacking, it makes their results harder to reproduce, especially if they are not upfront about the all the variables or they used or the transformations they performed on the data to get their results. P-hacking also makes the findings less reliable because biases can have an effect on the results.
                 </section>
             </div>
             <div id='vis'>

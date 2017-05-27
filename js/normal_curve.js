@@ -7,8 +7,8 @@ $(document).ready(function(){
     var margin = {
             top: 20,
             right: 20,
-            bottom: 30,
-            left: 50
+            bottom: 40,
+            left: 60
         },
         width = 800,
         drawWidth = width - margin.left - margin.right,
@@ -38,9 +38,9 @@ $(document).ready(function(){
         });
 
     var svg = d3.select("#vis").append("svg")
-        .attr("width", drawWidth + margin.left + margin.right)
-        .attr("height", drawHeight + margin.top + margin.bottom);
-        svg.append("g")
+        .attr("width", width)
+        .attr("height", height);
+    var g = svg.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     x.domain(d3.extent(data, function(d) {
@@ -50,14 +50,31 @@ $(document).ready(function(){
         return d.p;
     }));
 
-    svg.append("g")
+    // x axis
+    g.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + drawHeight + ")")
         .call(xAxis);
+    // x axis label
+    g.append('text')
+        .attr('class', 'axis-label')
+        .attr('transform', 'translate(' + (drawWidth / 2) + ',' + (drawHeight + margin.bottom) + ')')
+        .style('text-anchor', 'middle')
+        .text("Standard Deviations From Mean")
 
-    svg.append("g")
+    // y axis
+    g.append("g")
         .attr("class", "y axis")
         .call(yAxis);
+    // y axis label
+    g.append('text')
+        .attr('class', 'axis-label')
+        .attr('transform', 'rotate(-90)')
+        .attr('y', 0 - margin.left)
+        .attr('x', 0 - (drawHeight / 2))
+        .attr('dy', '1em')
+        .style('text-anchor', 'middle')
+        .text('Probability')
 
     // get data above p value 0.05
     var fillData = [];
@@ -76,12 +93,12 @@ $(document).ready(function(){
         .y1(function(d) {
             return y(d.p);
         });
-    svg.append('path')
+    g.append('path')
         .data([fillData])
         .attr('class', 'area')
         .attr('d', area);
 
-    svg.append("path")
+    g.append("path")
         .datum(data)
         .attr("class", "line")
         .attr("fill", "none")
@@ -89,8 +106,7 @@ $(document).ready(function(){
         .attr("d", line);
 
     // draw vertical line for p value of 0.05 (z=1.96)
-    var vertical = svg
-        .append('rect')
+    var vertical = g.append('rect')
         .attr('class', 'vertical')
         .attr('stroke', 'red')
         .attr('x', x(1.96))

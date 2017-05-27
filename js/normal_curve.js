@@ -10,14 +10,16 @@ $(document).ready(function(){
             bottom: 30,
             left: 50
         },
-        width = 960 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
+        width = 800,
+        drawWidth = width - margin.left - margin.right,
+        height = 400,
+        drawHeight = height - margin.top - margin.bottom;
 
     var x = d3.scaleLinear()
-        .range([0, width]);
+        .range([0, drawWidth]);
 
     var y = d3.scaleLinear()
-        .range([height, 0]);
+        .range([drawHeight, 0]);
 
     var xAxis = d3.axisBottom()
         .scale(x);
@@ -36,8 +38,8 @@ $(document).ready(function(){
         });
 
     var svg = d3.select("#vis").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom);
+        .attr("width", drawWidth + margin.left + margin.right)
+        .attr("height", drawHeight + margin.top + margin.bottom);
         svg.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -50,12 +52,34 @@ $(document).ready(function(){
 
     svg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
+        .attr("transform", "translate(0," + drawHeight + ")")
         .call(xAxis);
 
     svg.append("g")
         .attr("class", "y axis")
         .call(yAxis);
+
+    // get data above p value 0.05
+    var fillData = [];
+    data.forEach(function(d) {
+        if (x(d.q) >= x(1.96)) {
+            fillData.push(d);
+        }
+    });
+
+    // fill area with p above 0.05
+    var area = d3.area()
+        .x(function(d) {
+            return x(d.q);
+        })
+        .y0(y(0))
+        .y1(function(d) {
+            return y(d.p);
+        });
+    svg.append('path')
+        .data([fillData])
+        .attr('class', 'area')
+        .attr('d', area);
 
     svg.append("path")
         .datum(data)
@@ -63,6 +87,16 @@ $(document).ready(function(){
         .attr("fill", "none")
         .attr("stroke", "blue")
         .attr("d", line);
+
+    // draw vertical line for p value of 0.05 (z=1.96)
+    var vertical = svg
+        .append('rect')
+        .attr('class', 'vertical')
+        .attr('stroke', 'red')
+        .attr('x', x(1.96))
+        .attr('y', 0)
+        .attr('width', 1)
+        .attr('height', drawHeight);
 
     function getData() {
 

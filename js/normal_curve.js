@@ -38,6 +38,7 @@ $(document).ready(function(){
         });
 
     var svg = d3.select("#vis").append("svg")
+        .attr('class', 'curve')
         .attr("width", width)
         .attr("height", height);
     var g = svg.append("g")
@@ -118,7 +119,7 @@ $(document).ready(function(){
 
     // loop to populate data array with 
     // probabily - quantile pairs
-    for (var i = 0; i < 100000; i++) {
+    for (var i = 0; i < 25000; i++) {
         q = normal() // calc random draw from normal dist
         p = gaussian(q) // calc prob of rand draw
         el = {

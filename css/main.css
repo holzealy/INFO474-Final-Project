@@ -54,7 +54,7 @@
 #vis {
   display: inline-block;
   position: fixed;
-  top: 225px;
+  top: 150px;
   z-index: 1;
   margin-left: 50px;
   /* height: 600px; */

@@ -9,12 +9,14 @@ var ScatterPlot = function () {
         title = 'Chart title',
         fill = 'green',
         radius = 6,
+        colors = ['red', 'green', 'blue', 'orange'],
         margin = {
             left: 70,
             bottom: 50,
             top: 30,
             right: 10,
         };
+
 
     // Function returned by ScatterPlot
     var chart = function (selection) {
@@ -23,13 +25,7 @@ var ScatterPlot = function () {
         var chartWidth = width - margin.left - margin.right;
 
         // line of best fit
-        var line = d3.svg.line()
-            .x(function (d) {
-                return x(d.x);
-            })
-            .y(function (d) {
-                return y(d.yhat);
-            });
+        
 
         // Iterate through selections, in case there are multiple
         selection.each(function (data) {
@@ -76,15 +72,29 @@ var ScatterPlot = function () {
             // Define xAxis and yAxis functions
             var xAxis = d3.axisBottom().tickFormat(d3.format('.2s'));
             var yAxis = d3.axisLeft().tickFormat(d3.format('.2s'));
+            //console.log(d3.merge(data));
+            var allValues = d3.merge(data);
 
-            // Calculate x and y scales
-            var xMax = d3.max(data, (d) => +d.x) * 1.05;
-            var xMin = d3.min(data, (d) => +d.x) * .95;
-            xScale.range([0, chartWidth]).domain([xMin, xMax]);
+            xScale.range([0, chartWidth]);
+            yScale.range([chartHeight, 0]);
 
-            var yMin = d3.min(data, (d) => +d.y) * .95;
-            var yMax = d3.max(data, (d) => +d.y) * 1.05;
-            yScale.range([chartHeight, 0]).domain([yMin, yMax]);
+
+            var xMax = d3.max(allValues, (d) => +d.x) * 1.05;
+            var xMin = d3.min(allValues, (d) => +d.x) * .95;
+            xScale.domain([-0.0001, xMax]).nice();
+
+            var yMin = d3.min(allValues, (d) => +d.y) * .95;
+            var yMax = d3.max(allValues, (d) => +d.y) * 1.05;
+            yScale.domain([yMin, yMax]).nice();
+
+
+            //var line = d3.svg.line()
+            //.x(function (d) {
+             //   return xScale(d.x);
+           // })
+           // .y(function (d) {
+            //    return yScale(d.yhat);
+            //});
 
             // Update axes
             xAxis.scale(xScale);
@@ -96,27 +106,40 @@ var ScatterPlot = function () {
             ele.select('.xTitle').text(xTitle)
             ele.select('.yTitle').text(yTitle)
 
-            // Draw markers
-            var circles = ele.select('.chartG').selectAll('circle').data(data, (d) => d.id);
+            var z = d3.scaleOrdinal(d3.schemeCategory10);
 
-            // Use the .enter() method to get entering elements, and assign initial position
-            circles.enter().append('circle')
-                .attr('fill', fill)
+            // draw circles in series
+            var series = ele.select('.chartG').selectAll(".series")
+                .data(data)
+                .enter().append("g")
+                .attr("class", "series")
+                .style("fill", function(d, i) { return z(i); });
+
+                var circles = series.selectAll(".point")
+                .data(function (d) { return d; })
+                .enter().append("circle")
+                .attr('cx', (d) => xScale(+d.x))
                 .attr('cy', chartHeight)
+                .transition()
+                .duration(1500)
+                .delay((d) => xScale(+d.x) *5)
+                .attr("class", "point")
+                .attr("r", 4.5)
                 .style('opacity', .3)
-                .attr('cx', (d) => xScale(d.x))
-                // Transition properties of the + update selections
-                .merge(circles)
+                .attr('cx', (d) => xScale(+d.x))
+                .attr('cy', (d) => yScale(+d.y));
+
+                series.merge(series)
+                .style("fill", function(d, i) { return colors[i]; })
                 .attr('r', radius)
                 .transition()
                 .duration(1500)
-                .delay((d) => xScale(d.x) * 5)
-                .attr('cx', (d) => xScale(d.x))
-                .attr('cy', (d) => yScale(d.y))
+                .delay((d) => xScale(+d.x) * 5)
+                .attr('cx', (d) => xScale(+d.x))
+                .attr('cy', (d) => yScale(+d.y))
 
-            // Use the .exit() and .remove() methods to remove elements that are no longer in the data
-            circles.exit().remove();
-
+                series.exit().remove();
+            
             // draw line of best fit
             /*svgEnter.append("path")
                 .datum(data)

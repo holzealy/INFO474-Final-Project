@@ -115,7 +115,7 @@ var ScatterPlot = function () {
             }
 
             // line of best fit
-            var line = d3.line()
+            var trendline = d3.line()
                 .x(function(d) {
                     console.log(d.x);
                     return xScale(d.x);
@@ -179,10 +179,11 @@ var ScatterPlot = function () {
             // add line
             seriesEntering.append("path")
                 .datum(newData)
-                .attr("class", "line")
-                .attr("d", line);
+                .attr("class", "trendline")
+                .attr("d", trendline);
                               
              series.exit().transition().duration(1500).selectAll(".point").attr('cy', chartHeight).remove();
+             series.exit().remove();
              
         });
     };

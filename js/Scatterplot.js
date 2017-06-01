@@ -77,13 +77,51 @@ var ScatterPlot = function () {
             xScale.range([0, chartWidth]);
             yScale.range([chartHeight, 0]);
 
-            // line of best fit
-            var trendline = d3.line()
-                .x(function (d) {
-                    return x(d.x);
+            var n = allValues.length;
+            var x_mean = 0;
+            var y_mean = 0;
+            var term1 = 0;
+            var term2 = 0;
+            x_mean = d3.mean(allValues, (d) => +d.x)
+            y_mean = d3.mean(allValues, (d) => +d.y)
+
+            // calculate coefficients
+            var xr = 0;
+            var yr = 0;
+            for (i = 0; i < allValues.length; i++) {
+                xr = allValues[i].x - x_mean;
+                yr = allValues[i].y - y_mean;
+                term1 += xr * yr;
+                term2 += xr * xr;
+
+            }
+            var b1 = term1 / term2;
+            var b0 = y_mean - (b1 * x_mean);
+            // perform regression 
+
+            yhat = [];
+            // fit line using coeffs
+            for (i = 0; i < allValues.length; i++) {
+                yhat.push(b0 + (allValues[i].x * b1));
+            }
+
+            var newData = [];
+            for (i = 0; i < allValues.length; i++) {
+                newData.push({
+                    "yhat": yhat[i],
+                    "y": allValues[i].y,
+                    "x": allValues[i].x
                 })
-                .y(function (d) {
-                    return y(d.yhat);
+            }
+
+            // line of best fit
+            var line = d3.line()
+                .x(function(d) {
+                    console.log(d.x);
+                    return xScale(d.x);
+                })
+                .y(function(d) {
+                    return yScale(d.yhat);
                 });
 
             var xMax = d3.max(allValues, (d) => +d.x) * 1.05;
@@ -139,10 +177,10 @@ var ScatterPlot = function () {
             .attr('cy', (d) => yScale(+d.y)); 
 
             // add line
-            svg.append("path")
-                .data(data)
+            seriesEntering.append("path")
+                .datum(newData)
                 .attr("class", "line")
-                .attr("d", trendline);
+                .attr("d", line);
                               
              series.exit().transition().duration(1500).selectAll(".point").attr('cy', chartHeight).remove();
              

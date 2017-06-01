@@ -2,30 +2,30 @@ $(function () {
 
     /* Create a scatter plot of 1960 life expectancy (gdp) versus 2013 life expectancy (life_expectancy).*/
     // Variables to show
-    var xVar1 = 'Economy';
+    var xVar1 = 'x1';
     var xVar2 = '';
     var xVar3 = '';
     var xVar4 = '';
-    var yVar = 'target';
-    var seriesNames = new Set(["Economy", "Family", "Trust", "Health"]);
-    var variables = { "Economy": null, "Family": null, "Trust": null, "Health": null };
+    var yVar = 'y';
+    var seriesNames = new Set(["x1", "x2", "x3"]);
+    var variables = { "x1": null, "x2": null, "x3": null};
     var chartData = new Array();
 
     // Load data in using d3's csv function.
-    d3.csv('data/normalized_2016.csv', function (error, data) {
+    d3.csv('data/generated_data.csv', function (error, data) {
         // Put data into generic terms
         var prepData = function () {
             // all data is mapped and returned
             var keys = Object.keys(variables);
             keys.forEach(function(series){
                  variables[series] = data.map(function (d) {
-                        return { x: +d[series], y: +d[yVar], id: d.Country, type: series };
+                        return { x: +d[series], y: +d[yVar], id: d.id, type: series };
                     });
             });
         };
 
         prepData();
-        var scatter = ScatterPlot().Title("Happiness Score by Economy, Trust, Family & Health").yTitle('Happiness Score').xTitle("Indicators");
+        var scatter = ScatterPlot().Title("Happiness Score by Economy, Trust & Health").yTitle('Happiness Score').xTitle("Indicators");
         var chart = d3.select("#vis2").datum(chartData).call(scatter);
 
         updateVars =  function() {

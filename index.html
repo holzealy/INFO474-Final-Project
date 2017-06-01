@@ -48,18 +48,17 @@
                 </section>
                 <section class="step">
                     <div class="title">Is there a relationship in this data?</div>
-                    This scatterplot shows two variables plotted against each other for a number of observations. You might be interested in whether or not there is a correlation between the two variables. It looks like there might be a relationship between the two variables, but how do you know if the correlation is real?
+                    This scatterplot shows two variables plotted against each other for a number of observations. You might be interested in whether or not there is a correlation between the two variables. It looks like there might be a relationship between the two variables, but how do you know if the correlation is strong enough?
                 </section>
                 <section class="step">
                     This line shows the relationship between the two variables for the whole data set. This p-value represents the probability that you would get results as strong as this without there being a real correlation between these two variables.
-                    (Vis: scatterplot with line and p-value.)
                 </section>
                 <section class="step">
                     <div class="title">Try it out</div>
-                    You can manipulate the variables to get the desired p-value of 0.05. (Vis: scatterplot with line, p-value, and buttons to change variables.)
+                    You can manipulate the variables to get the desired p-value of 0.05.
                     <div id="controls">
                         <br />
-                        <p>Select Variables to Display:</p>
+                        <p class="subtitle">Select Variables to Display:</p>
                         <div class="form-check" >
                             <label class="form-check-label"><input class="form-check-input" type="checkbox" value="x1" name="hello" checked> Economy</label>
                         </div>
@@ -69,8 +68,12 @@
                         <div class="form-check" >
                             <label class="form-check-label"><input class="form-check-input" type="checkbox" value="x3"> Trust</label>
                         </div>
+                        <br />
                     </div>
-                    <div id="p-val">
+                    <div>
+                        <p class="subtitle">Results:</p>
+                        <p><span class="result">P-Value</span>: <span id="p-val"></span></p>
+                        <p><span class="result">Publishable</span>: <span id="pub"></span></p>
                     </div>
                 </section>
                 <section class="step">

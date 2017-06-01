@@ -44,6 +44,31 @@ $(function () {
                 }
             }
             chart.datum(chartData).call(scatter);
+
+            var pvalue = 0;
+            var pub = 'No';
+            if (keys.length == 1) {
+                if (keys[0] == 'x1') {
+                    pvalue = 0.128765011;
+                } else if (keys[0] == 'x1') {
+                    pvalue = 0.4840859;
+                }
+            } else if (keys.length == 2) {
+                if(keys[0] == 'x1' && keys[1] == 'x2') {
+                    pvalue = 0.4840859;
+                } else if(keys[0] == 'x2' && keys[1] == 'x3') {
+                    pvalue = 0.210957409574648;
+                } else if(keys[0] == 'x1' && keys[1] == 'x3') {
+                    pvalue = 0.420889108678542;
+                }
+            } else if (keys.length == 3) {
+                pvalue = 1.33055625860781E-227;
+            }
+            if (pvalue <= 0.05) {
+                pub = 'Yes';
+            }
+            d3.select('#p-val').text(pvalue);
+            d3.select('#pub').text(pub);
         }
         updateVars();
 

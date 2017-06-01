@@ -89,3 +89,15 @@
     fill: none;
     stroke-width: 3;
 }
+
+.subtitle, #p-val, #pub {
+  font-weight: bold;
+}
+
+.result {
+  text-decoration: underline;
+}
+
+#p-val, #pub {
+  color: steelblue;
+}

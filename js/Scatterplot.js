@@ -126,7 +126,7 @@ var ScatterPlot = function () {
 
             var xMax = d3.max(allValues, (d) => +d.x) * 1.05;
             var xMin = d3.min(allValues, (d) => +d.x) * .95;
-            xScale.domain([xMin, xMax]).nice();
+            xScale.domain([xMin - 0.5, xMax]).nice();
 
             var yMin = d3.min(allValues, (d) => +d.y) * .95;
             var yMax = d3.max(allValues, (d) => +d.y) * 1.05;

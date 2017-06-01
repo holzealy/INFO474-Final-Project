@@ -7,13 +7,11 @@ var ScatterPlot = function () {
         xTitle = 'X Axis Title',
         yTitle = 'Y Axis Title',
         title = 'Chart title',
-        fill = 'green',
         radius = 6,
-        colors = ['red', 'green', 'blue', 'orange'],
         margin = {
             left: 70,
             bottom: 50,
-            top: 30,
+            top: 45,
             right: 10,
         };
 
@@ -24,9 +22,6 @@ var ScatterPlot = function () {
         var chartHeight = height - margin.bottom - margin.top;
         var chartWidth = width - margin.left - margin.right;
 
-        // line of best fit
-        
-
         // Iterate through selections, in case there are multiple
         selection.each(function (data) {
             // Use the data-join to create the svg (if necessary)
@@ -36,12 +31,14 @@ var ScatterPlot = function () {
             // Append static elements (i.e., only added once)
             var svgEnter = svg.enter()
                 .append("svg")
+                .attr('class', 'scatter')
+                .style('opacity', 0)
                 .attr('width', width)
                 .attr("height", height);
 
             // Title G
             svgEnter.append('text')
-                .attr('transform', 'translate(' + (margin.left + chartWidth / 2) + ',' + 20 + ')')
+                .attr('transform', 'translate(' + (margin.left + chartWidth / 10) + ',' + 20 + ')')
                 .text(title)
                 .attr('class', 'chart-title')
 
@@ -72,8 +69,10 @@ var ScatterPlot = function () {
             // Define xAxis and yAxis functions
             var xAxis = d3.axisBottom().tickFormat(d3.format('.2s'));
             var yAxis = d3.axisLeft().tickFormat(d3.format('.2s'));
-            //console.log(d3.merge(data));
-            var allValues = d3.merge(data);
+            var values = data.map(function(series){
+                return series.values;
+            })
+            var allValues = d3.merge(values);
 
             xScale.range([0, chartWidth]);
             yScale.range([chartHeight, 0]);
@@ -87,15 +86,6 @@ var ScatterPlot = function () {
             var yMax = d3.max(allValues, (d) => +d.y) * 1.05;
             yScale.domain([yMin, yMax]).nice();
 
-
-            //var line = d3.svg.line()
-            //.x(function (d) {
-             //   return xScale(d.x);
-           // })
-           // .y(function (d) {
-            //    return yScale(d.yhat);
-            //});
-
             // Update axes
             xAxis.scale(xScale);
             yAxis.scale(yScale);
@@ -106,47 +96,42 @@ var ScatterPlot = function () {
             ele.select('.xTitle').text(xTitle)
             ele.select('.yTitle').text(yTitle)
 
-            var z = d3.scaleOrdinal(d3.schemeCategory10);
+            var z = d3.scaleOrdinal().domain(["Economy", "Trust", "Health", "Family"]).range(d3.schemeCategory10);
 
             // draw circles in series
             var series = ele.select('.chartG').selectAll(".series")
-                .data(data)
-                .enter().append("g")
-                .attr("class", "series")
-                .style("fill", function(d, i) { return z(i); });
+                .data(data, function(d){
+                    return d.key;
+                }); 
+            var seriesEntering = series.enter()
+                .append("g")
+                .attr("class", "series");
+                //.style("fill", function(d, i) { return z(i); });
 
-                var circles = series.selectAll(".point")
-                .data(function (d) { return d; })
-                .enter().append("circle")
-                .attr('cx', (d) => xScale(+d.x))
-                .attr('cy', chartHeight)
-                .transition()
-                .duration(1500)
-                .delay((d) => xScale(+d.x) *5)
-                .attr("class", "point")
-                .attr("r", 4.5)
-                .style('opacity', .3)
-                .attr('cx', (d) => xScale(+d.x))
-                .attr('cy', (d) => yScale(+d.y));
+            var points = seriesEntering
+            .merge(series)
+            .selectAll('.point')
+            .data(function(d){return d.values;});
 
-                series.merge(series)
-                .style("fill", function(d, i) { return colors[i]; })
-                .attr('r', radius)
-                .transition()
-                .duration(1500)
-                .delay((d) => xScale(+d.x) * 5)
-                .attr('cx', (d) => xScale(+d.x))
-                .attr('cy', (d) => yScale(+d.y))
-
-                series.exit().remove();
-            
-            // draw line of best fit
-            /*svgEnter.append("path")
-                .datum(data)
-                .attr("class", "line")
-                .transition()
-                .duration(1500)
-                .attr("d", line);*/
+            points.enter()
+            .append("circle")
+            .attr('cx', (d) => xScale(+d.x))
+            .attr('cy', chartHeight)
+            .merge(points)
+            .transition()
+            .duration(1500)
+            .delay((d) => xScale(+d.x) *5)
+            .attr("class", "point")
+            .attr("r", 4.5)
+            .attr("fill", function(d){
+                return z(d.type);
+            })
+            .style('opacity', .3)
+            .attr('cx', (d) => xScale(+d.x))
+            .attr('cy', (d) => yScale(+d.y)); 
+                              
+             series.exit().transition().duration(1500).selectAll(".point").attr('cy', chartHeight).remove();
+             
         });
     };
 
@@ -178,6 +163,11 @@ var ScatterPlot = function () {
     chart.yTitle = function (value) {
         if (!arguments.length) return yTitle;
         yTitle = value;
+        return chart;
+    };
+    chart.Title = function (value) {
+        if (!arguments.length) return title;
+        title = value;
         return chart;
     };
     chart.radius = function (value) {

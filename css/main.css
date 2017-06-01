@@ -47,19 +47,27 @@
   line-height: 1.2em;
 }
 
-#extra-space {
+/*#extra-space {
   height: 300px;
-}
+}*/
 
-#vis {
+#vis, #vis2 {
   display: inline-block;
   position: fixed;
-  top: 150px;
   z-index: 1;
-  margin-left: 50px;
   /* height: 600px; */
   /* width: 600px; */
   /* background-color: #ddd; */
+}
+
+#vis {
+  top: 150px;
+  margin-left: 50px;
+}
+
+#vis2 {
+  top: 100px;
+  margin-left: 125px;
 }
 
 #vis .title {

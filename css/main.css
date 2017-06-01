@@ -83,3 +83,9 @@
 .area {
   fill: lightcoral;
 }
+
+.trendline {
+    stroke: #E4002B;
+    fill: none;
+    stroke-width: 3;
+}

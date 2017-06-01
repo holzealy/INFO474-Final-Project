@@ -77,6 +77,14 @@ var ScatterPlot = function () {
             xScale.range([0, chartWidth]);
             yScale.range([chartHeight, 0]);
 
+            // line of best fit
+            var trendline = d3.line()
+                .x(function (d) {
+                    return x(d.x);
+                })
+                .y(function (d) {
+                    return y(d.yhat);
+                });
 
             var xMax = d3.max(allValues, (d) => +d.x) * 1.05;
             var xMin = d3.min(allValues, (d) => +d.x) * .95;
@@ -96,7 +104,7 @@ var ScatterPlot = function () {
             ele.select('.xTitle').text(xTitle)
             ele.select('.yTitle').text(yTitle)
 
-            var z = d3.scaleOrdinal().domain(["Economy", "Trust", "Health", "Family"]).range(d3.schemeCategory10);
+            var z = d3.scaleOrdinal().domain(["Economy", "Trust", "Health"]).range(d3.schemeCategory10);
 
             // draw circles in series
             var series = ele.select('.chartG').selectAll(".series")
@@ -129,6 +137,12 @@ var ScatterPlot = function () {
             .style('opacity', .3)
             .attr('cx', (d) => xScale(+d.x))
             .attr('cy', (d) => yScale(+d.y)); 
+
+            // add line
+            svg.append("path")
+                .data(data)
+                .attr("class", "line")
+                .attr("d", trendline);
                               
              series.exit().transition().duration(1500).selectAll(".point").attr('cy', chartHeight).remove();
              

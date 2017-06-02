@@ -180,12 +180,12 @@ $(function () {
             d3.select('.vertical').style('opacity', 1);
             d3.select('.area').style('opacity', 0);
             d3.select('.scatter').style('opacity', 0);
-        } else if (document.body.scrollTop > 1300 && document.body.scrollTop < 1800) {
+        } else if (document.body.scrollTop > 1300 && document.body.scrollTop < 1750) {
             d3.select('.curve').style('opacity', 1);
             d3.select('.vertical').style('opacity', 1);
             d3.select('.area').style('opacity', 1);
             d3.select('.scatter').style('opacity', 0);
-        } else if (document.body.scrollTop > 1800 && document.body.scrollTop < 2000) {
+        } else if (document.body.scrollTop > 1750 && document.body.scrollTop < 2000) {
             d3.select('.curve').style('opacity', 0);
             d3.select('.scatter').style('opacity', 0);
         } else if (document.body.scrollTop > 2000 && document.body.scrollTop < 2400) {

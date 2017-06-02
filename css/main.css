@@ -90,7 +90,7 @@
     stroke-width: 3;
 }
 
-.subtitle, #p-val, #pub {
+.subtitle {
   font-weight: bold;
 }
 
@@ -100,8 +100,10 @@
 
 .yes {
   color: green;
+  font-weight: bold;
 }
 
 .no {
   color: red;
+  font-weight: bold;
 }

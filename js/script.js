@@ -59,7 +59,6 @@ $(function () {
     };
 
     var data2 = getData();
-    console.log(data);
     var n = normal_curve();
     var chart1 = d3.select("#vis").datum(data).call(n);  
 
@@ -97,32 +96,59 @@ $(function () {
             }
             chart.datum(chartData).call(scatter);
 
-            var pvalue = 0;
-            var pub = 'No';
+            var pvalue1 = 'N/A';
+            var pvalue2 = 'N/A';
+            var pvalue3 = 'N/A';
+            var pub1 = 'N/A';
+            var pub2 = 'N/A';
+            var pub3 = 'N/A';
             if (keys.length == 1) {
                 if (keys[0] == 'x1') {
-                    pvalue = 0.129;
-                } else if (keys[0] == 'x1') {
-                    pvalue = 0.484;
+                    pvalue1 = 0.129;
+                    pub1 = 'no';
+                } else if (keys[0] == 'x2') {
+                    pvalue2 = 0;
+                    pub2 = 'yes';
+                } else if (keys[0] == 'x3') {
+                    pvalue3 = 0.484;
+                    pub3 = 'no';
                 }
             } else if (keys.length == 2) {
                 if(keys[0] == 'x1' && keys[1] == 'x2') {
-                    pvalue = 0.484;
+                    pvalue1 = 0.484;
+                    pvalue2 = 0;
+                    pub1 = 'no';
+                    pub2 = 'yes';
                 } else if(keys[0] == 'x2' && keys[1] == 'x3') {
-                    pvalue = 0.211;
+                    pvalue2 = 0;
+                    pvalue3 = 0.211;
+                    pub2 = 'yes';
+                    pub3 = 'no';
                 } else if(keys[0] == 'x1' && keys[1] == 'x3') {
-                    pvalue = 0.421;
+                    pvalue1 = 0.117;
+                    pvalue3 = 0.421;
+                    pub1 = 'no';
+                    pub3 = 'no';
                 }
             } else if (keys.length == 3) {
-                pvalue = 1.331E-227;
+                pvalue1 = 1.331E-227;
+                pvalue2 = 0;
+                pvalue3 = 0.663;
+                pub1 = 'yes';
+                pub2 = 'yes';
+                pub3 = 'no';
             }
-            if (pvalue <= 0.05) {
-                d3.select('#p-val').text(pvalue).attr('class', 'yes');
-                d3.select('#pub').text(pub).attr('class', 'yes');
-            } else {
-                d3.select('#p-val').text(pvalue).attr('class', 'no');
-                d3.select('#pub').text(pub).attr('class', 'no');
+
+            setResults = function(num, value, pub) {
+                pId = '#p-val' + num;
+                pubId = '#pub' + num;
+                    d3.select(pId).text(value).attr('class', pub);
+                    d3.select(pubId).text(pub).attr('class', pub);
             }
+
+            setResults(1, pvalue1, pub1);
+            setResults(2, pvalue2, pub2);
+            setResults(3, pvalue3, pub3);
             
         }
         updateVars();

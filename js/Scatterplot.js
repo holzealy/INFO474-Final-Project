@@ -117,7 +117,6 @@ var ScatterPlot = function () {
             // line of best fit
             var trendline = d3.line()
                 .x(function(d) {
-                    console.log(d.x);
                     return xScale(d.x);
                 })
                 .y(function(d) {
@@ -176,12 +175,18 @@ var ScatterPlot = function () {
             .attr('cx', (d) => xScale(+d.x))
             .attr('cy', (d) => yScale(+d.y)); 
 
-            // add line
-            seriesEntering.append("path")
+            // remove old line
+            d3.select('.chartG').selectAll('.trendline').remove();
+
+            // add new line for all data shown
+            d3.select('.chartG').append("path")
                 .datum(newData)
+                .attr('opacity', 0)
                 .attr("class", "trendline")
-                .attr("d", trendline);
-                              
+                .attr("d", trendline)
+                .transition().delay(3000)
+                .attr('opacity', 1);
+  
              series.exit().transition().duration(1500).selectAll(".point").attr('cy', chartHeight).remove();
              series.exit().remove();
              

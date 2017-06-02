@@ -101,26 +101,29 @@ $(function () {
             var pub = 'No';
             if (keys.length == 1) {
                 if (keys[0] == 'x1') {
-                    pvalue = 0.128765011;
+                    pvalue = 0.129;
                 } else if (keys[0] == 'x1') {
-                    pvalue = 0.4840859;
+                    pvalue = 0.484;
                 }
             } else if (keys.length == 2) {
                 if(keys[0] == 'x1' && keys[1] == 'x2') {
-                    pvalue = 0.4840859;
+                    pvalue = 0.484;
                 } else if(keys[0] == 'x2' && keys[1] == 'x3') {
-                    pvalue = 0.210957409574648;
+                    pvalue = 0.211;
                 } else if(keys[0] == 'x1' && keys[1] == 'x3') {
-                    pvalue = 0.420889108678542;
+                    pvalue = 0.421;
                 }
             } else if (keys.length == 3) {
-                pvalue = 1.33055625860781E-227;
+                pvalue = 1.331E-227;
             }
             if (pvalue <= 0.05) {
-                pub = 'Yes';
+                d3.select('#p-val').text(pvalue).attr('class', 'yes');
+                d3.select('#pub').text(pub).attr('class', 'yes');
+            } else {
+                d3.select('#p-val').text(pvalue).attr('class', 'no');
+                d3.select('#pub').text(pub).attr('class', 'no');
             }
-            d3.select('#p-val').text(pvalue);
-            d3.select('#pub').text(pub);
+            
         }
         updateVars();
 
@@ -159,9 +162,14 @@ $(function () {
         } else if (document.body.scrollTop > 1800 && document.body.scrollTop < 2000) {
             d3.select('.curve').style('opacity', 0);
             d3.select('.scatter').style('opacity', 0);
-        } else if (document.body.scrollTop > 2000) {
+        } else if (document.body.scrollTop > 2000 && document.body.scrollTop < 2400) {
             d3.select('.curve').style('opacity', 0);
             d3.select('.scatter').style('opacity', 1);
+            d3.select('.trendline').style('opacity', 0);
+        } else if (document.body.scrollTop > 2400) {
+            d3.select('.curve').style('opacity', 0);
+            d3.select('.scatter').style('opacity', 1);
+            d3.select('.trendline').style('opacity', 1);
         }
     }
 

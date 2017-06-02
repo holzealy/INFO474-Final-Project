@@ -74,9 +74,11 @@ var ScatterPlot = function () {
             })
             var allValues = d3.merge(values);
 
+            // set x and y ranges
             xScale.range([0, chartWidth]);
             yScale.range([chartHeight, 0]);
 
+            // values needed for best fit line
             var n = allValues.length;
             var x_mean = 0;
             var y_mean = 0;
@@ -93,8 +95,8 @@ var ScatterPlot = function () {
                 yr = allValues[i].y - y_mean;
                 term1 += xr * yr;
                 term2 += xr * xr;
-
             }
+
             var b1 = term1 / term2;
             var b0 = y_mean - (b1 * x_mean);
             // perform regression 
@@ -105,6 +107,7 @@ var ScatterPlot = function () {
                 yhat.push(b0 + (allValues[i].x * b1));
             }
 
+            // store data with yhat value
             var newData = [];
             for (i = 0; i < allValues.length; i++) {
                 newData.push({
@@ -123,10 +126,12 @@ var ScatterPlot = function () {
                     return yScale(d.yhat);
                 });
 
+            // set x domian
             var xMax = d3.max(allValues, (d) => +d.x) * 1.05;
             var xMin = d3.min(allValues, (d) => +d.x) * .95;
             xScale.domain([xMin - 0.5, xMax]).nice();
 
+            // set y domain
             var yMin = d3.min(allValues, (d) => +d.y) * .95;
             var yMax = d3.max(allValues, (d) => +d.y) * 1.05;
             yScale.domain([yMin, yMax]).nice();
@@ -141,6 +146,7 @@ var ScatterPlot = function () {
             ele.select('.xTitle').text(xTitle)
             ele.select('.yTitle').text(yTitle)
 
+            // color scale
             var z = d3.scaleOrdinal().domain(["Economy", "Trust", "Health"]).range(d3.schemeCategory10);
 
             // draw circles in series
@@ -151,29 +157,28 @@ var ScatterPlot = function () {
             var seriesEntering = series.enter()
                 .append("g")
                 .attr("class", "series");
-                //.style("fill", function(d, i) { return z(i); });
 
             var points = seriesEntering
-            .merge(series)
-            .selectAll('.point')
-            .data(function(d){return d.values;});
+                .merge(series)
+                .selectAll('.point')
+                .data(function(d){return d.values;});
 
             points.enter()
-            .append("circle")
-            .attr('cx', (d) => xScale(+d.x))
-            .attr('cy', chartHeight)
-            .merge(points)
-            .transition()
-            .duration(1500)
-            .delay((d) => xScale(+d.x) *5)
-            .attr("class", "point")
-            .attr("r", 4.5)
-            .attr("fill", function(d){
-                return z(d.type);
-            })
-            .style('opacity', .3)
-            .attr('cx', (d) => xScale(+d.x))
-            .attr('cy', (d) => yScale(+d.y)); 
+                .append("circle")
+                .attr('cx', (d) => xScale(+d.x))
+                .attr('cy', chartHeight)
+                .merge(points)
+                .transition()
+                .duration(1500)
+                .delay((d) => xScale(+d.x) *5)
+                .attr("class", "point")
+                .attr("r", 4.5)
+                .attr("fill", function(d){
+                    return z(d.type);
+                })
+                .style('opacity', .3)
+                .attr('cx', (d) => xScale(+d.x))
+                .attr('cy', (d) => yScale(+d.y)); 
 
             // remove old line
             d3.select('.chartG').selectAll('.trendline').remove();
@@ -187,9 +192,9 @@ var ScatterPlot = function () {
                 .transition().delay(3000)
                 .attr('opacity', 1);
   
-             series.exit().transition().duration(1500).selectAll(".point").attr('cy', chartHeight).remove();
-             series.exit().remove();
-             
+            // remove exiting data points
+            series.exit().transition().duration(1500).selectAll(".point").attr('cy', chartHeight).remove();
+            
         });
     };
 

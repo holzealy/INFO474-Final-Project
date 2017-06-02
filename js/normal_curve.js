@@ -12,20 +12,21 @@ var normal_curve = function () {
         height = 400,
         drawHeight = height - margin.top - margin.bottom;
 
+    // x scale
     var x = d3.scaleLinear()
         .range([0, drawWidth]);
 
+    // y scale
     var y = d3.scaleLinear()
         .range([drawHeight, 0]);
 
     var xAxis = d3.axisBottom()
         .scale(x);
-        //.orient("bottom");
 
     var yAxis = d3.axisLeft()
         .scale(y);
-        //.orient("left");
 
+    // line for curve
     var line = d3.line()
         .x(function(d) {
             return x(d.q);
@@ -48,7 +49,7 @@ var normal_curve = function () {
             var g = svgEnter.append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
+            // set x and y domains
             x.domain(d3.extent(data, function(d) {
                 return d.q;
             }));
@@ -82,7 +83,7 @@ var normal_curve = function () {
                 .style('text-anchor', 'middle')
                 .text('Probability')
 
-            // get data above p value 0.05
+            // get data above p value 0.05 to fill in
             var fillData = [];
             data.forEach(function(d) {
                 if (x(d.q) >= x(1.96)) {
@@ -104,6 +105,7 @@ var normal_curve = function () {
                 .attr('class', 'area')
                 .attr('d', area);
 
+            // draw curve
             g.append("path")
                 .datum(data)
                 .attr("class", "line")
@@ -120,7 +122,7 @@ var normal_curve = function () {
                 .attr('width', 1)
                 .attr('height', drawHeight);
         });
-        
+
     }
     return chart;
 }

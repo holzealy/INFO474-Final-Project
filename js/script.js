@@ -1,6 +1,5 @@
 $(function () {
 
-    /* Create a scatter plot of 1960 life expectancy (gdp) versus 2013 life expectancy (life_expectancy).*/
     // Variables to show
     var xVar1 = 'x1';
     var xVar2 = '';
@@ -11,11 +10,11 @@ $(function () {
     var variables = { "x1": null, "x2": null, "x3": null};
     var chartData = new Array();
 
+    // to store data for normal curve
     var data = [];
-
+    // get data for normal curve
     function getData() {
-        // loop to populate data array with 
-        // probabily - quantile pairs
+        // loop to populate data array with probabily - quantile pairs
         for (var i = 0; i < 25000; i++) {
             q = normal() // calc random draw from normal dist
             p = gaussian(q) // calc prob of rand draw
@@ -58,9 +57,13 @@ $(function () {
         return gaussianConstant * Math.exp(-.5 * x * x) / sigma;
     };
 
-    var data2 = getData();
+    // create chart using reusable function
+    getData();
     var n = normal_curve();
     var chart1 = d3.select("#vis").datum(data).call(n);  
+
+
+    //For creating scatterplot
 
     // Load data in using d3's csv function.
     d3.csv('data/generated_data.csv', function (error, data) {
@@ -76,9 +79,12 @@ $(function () {
         };
 
         prepData();
+
+        // create scatterplot using reusable function
         var scatter = ScatterPlot().Title("Happiness Score by Economy, Trust & Health").yTitle('Happiness Score').xTitle("Indicators");
         var chart = d3.select("#vis2").datum(chartData).call(scatter);
 
+        // update chart variables when controls are changed
         updateVars =  function() {
             chartData.length = 0;
             var selected =  $("input:checkbox:checked");
@@ -94,8 +100,10 @@ $(function () {
                     chartData.push(series_a);
                 }
             }
+            //update
             chart.datum(chartData).call(scatter);
 
+            //for displaying results
             var pvalue1 = 'N/A';
             var pvalue2 = 'N/A';
             var pvalue3 = 'N/A';
@@ -145,14 +153,16 @@ $(function () {
                     d3.select(pId).text(value).attr('class', pub);
                     d3.select(pubId).text(pub).attr('class', pub);
             }
-
+            //get results for selected variables
             setResults(1, pvalue1, pub1);
             setResults(2, pvalue2, pub2);
             setResults(3, pvalue3, pub3);
-            
         }
+
+        // for initial chart on page load
         updateVars();
 
+        // listen for changes
         $(".form-check-input").change(function () {
             updateVars();
         });
